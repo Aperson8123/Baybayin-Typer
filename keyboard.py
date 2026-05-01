@@ -7,9 +7,9 @@ from pynput.keyboard import Key, KeyCode
 KP: str = ""
 "Global variable storing the last alphanumeric keyboard input"
 UPDATE: bool = False
-"Used so listener thread can communicate with main thread when a key is pressed"
+"Used so listener thread can communicate with main thread when an alphanumeric key is pressed"
 
-def on_press(key: KeyCode | Key):
+def on_press(key: KeyCode | Key) -> bool:
     global UPDATE
     global KP
     try:
@@ -37,20 +37,24 @@ def main():
     global UPDATE
     global KP
 
-    key3: deque[str] = deque(maxlen=3)
+    key3: deque[str] = deque((None, None, None), maxlen=3) # Initially filled with None so all elems are always accesible
 
     while listener.running:
-        if not UPDATE: # Do nothing if theres no update from listener
+        if not UPDATE: # Do nothing if theres no update from listener. Updates only occur when an alphanumeric key is pressed
             continue
 
         kp = KP # making a local version to use cause thats probably better or smthn
         key3.append(kp)
+
         print(f"update: new kp {kp}")
         print(f"last 3 keys: {key3}")
 
-        if kp == 'b':
+        
+        if kp in by.bayeng:
             controller.tap(Key.backspace)
-            controller.tap(by.baychar_dict[kp])
+            controller.tap(by.baycons_dict[kp])
+            controller.tap(by.baymod_dict["vowel_terminator"])
+        # controller.type(by.baycons_dict[kp])
 
         UPDATE = False # Resetting update to wait for listener to make it true again
 

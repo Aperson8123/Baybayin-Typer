@@ -16,16 +16,22 @@ baychar_end: int = int("1712", 16)
 baymod_start: int = int("1712", 16)
 baymod_end: int = int("1716", 16) 
 
-baychar_uni: list[int] = list(range(baychar_start, baychar_end))
-"List of all baybayin characters in decimal unicode in ascending order"
-baychar: list[chr] = [chr(x) for x in baychar_uni]
-"List of all baybayin characters in ascending order of their unicode number"
-bayeng: list[str] = ["a", "i", "u", "ka", "ga", "nga", "ta", "da", "na", "pa", "b", "ma", "ya", "ra", "la", "wa", "sa", "ha"]
-"What baychar list corresponds to in english characters in order"
+baycons_uni: list[int] = list(range(baychar_start, baychar_end))
+"List of all baybayin consonant characters in decimal unicode in ascending order"
+baycons: list[chr] = [chr(x) for x in baycons_uni]
+"List of all baybayin consonant characters in ascending order of their unicode number"
+bayeng: list[str] = ["a", "i", "u", "k", "g", "ng", "t", "d", "n", "p", "b", "m", "y", "r", "l", "w", "s", "h"]
+"What baycons list corresponds to in english characters in order"
 
 baymod_int: list[int] = list(range(baymod_start, baymod_end))
+"List of all baybayin characters modifiers in decimal unicode in ascending order"
 baymod: list[chr] = [chr(x) for x in baymod_int] 
+"List of all baybayin character modifiers in ascending order of their unicode number"
 baymodeng: list[str] = ["i", "u", "vowel_terminator"]
+"What baymod list corresponds to in english characters in order"
 
-baychar_dict: dict[str, str] = {}
-for i, char in enumerate(bayeng): baychar_dict.update({char: baychar[i]})
+baycons_dict: dict[str, str] = {}
+for i, char in enumerate(bayeng): baycons_dict.update({char: baycons[i]})
+
+baymod_dict: dict[str, str] = {}
+for i, char in enumerate(baymodeng): baymod_dict.update({char: baymod[i]})
