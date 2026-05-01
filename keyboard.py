@@ -19,6 +19,8 @@ def on_press(key: KeyCode | Key) -> bool:
 
         if isinstance(key, KeyCode): # If last key pressed is an alphanumeric character:
             char = key.char.lower() # To make everything case insensitive
+            if char == 'o': char = 'u'
+            if char == 'e': char = 'i'
             KP = char
             ALPH_UPDATE = True
 
@@ -53,7 +55,7 @@ def main():
 
         last_key = key2[0]
         # Definitely a better way to do this
-        if (last_key in by.vowels_eng) and (kp in by.vowels_eng):
+        if (last_key in by.vowels_eng or last_key is None) and (kp in by.vowels_eng):
             controller.tap(by.baycons_dict[kp])
         elif last_key in by.baycons_eng and kp == 'a':
             controller.tap(Key.backspace) # delete the vowel terminator that we assume is there
