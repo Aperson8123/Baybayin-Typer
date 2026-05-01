@@ -1,11 +1,15 @@
 import traceback
-from collections import deque # TODO Use this when storing the keyboard inputs
+from collections import deque
 from pynput import keyboard
 
-KP3: deque[str] = deque(maxlen=3)
-"Global variable storing last 3 alphanumeric keyboard inputs as a que"
+KP: str = ""
+"Global variable storing the last alphanumeric keyboard input"
+UPDATE: bool = False
+"Used so listener thread can communicate with main thread when a key is pressed"
 
 def on_press(key: keyboard.KeyCode | keyboard.Key):
+    global UPDATE
+    global KP
     try:
         if key == keyboard.Key.esc:
             print("No longer reading events")
@@ -13,8 +17,9 @@ def on_press(key: keyboard.KeyCode | keyboard.Key):
 
         if isinstance(key, keyboard.KeyCode): # If last key pressed is an alphanumeric character:
             char = key.char.lower() # To make everything case insensitive
-            KP3.append(char)
-            print(KP3)
+            KP = char
+            UPDATE = True
+            #print(KP3)
 
     except Exception:
         print(traceback.format_exc())
@@ -25,12 +30,19 @@ def main():
     listener = keyboard.Listener(on_press=on_press)
     listener.start()
 
+    global UPDATE
+    global KP
+
+    key3: deque[str] = deque(maxlen=3)
+
+    while listener.running:
+        if UPDATE:
+            key3.append(KP)
+            print("updated")
+            print(f"last 3 keys: {key3}")
+        UPDATE = False
+
 main()
-
-
-
-
-
 
 # with keyboard.Events() as events:
 
