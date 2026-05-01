@@ -39,7 +39,6 @@ def main():
     global KP
 
     key2: deque[str] = deque((None, None), maxlen=2) # Initially filled with None so all elems are always accesible
-
     while listener.running:
         if not ALPH_UPDATE:
             continue
@@ -55,7 +54,7 @@ def main():
 
         last_key = key2[0]
         # Definitely a better way to do this
-        if (last_key in by.vowels_eng or last_key is None) and (kp in by.vowels_eng):
+        if (last_key in by.vowels_eng or (last_key is None)) and (kp in by.vowels_eng):
             controller.tap(by.baycons_dict[kp])
         elif last_key in by.baycons_eng and kp == 'a':
             controller.tap(Key.backspace) # delete the vowel terminator that we assume is there
