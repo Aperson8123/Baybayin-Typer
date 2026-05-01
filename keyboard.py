@@ -21,7 +21,6 @@ def on_press(key: KeyCode | Key) -> bool:
             char = key.char.lower() # To make everything case insensitive
             KP = char
             UPDATE = True
-            #print(KP3)
 
     except:
         print(traceback.format_exc())
@@ -59,16 +58,3 @@ def main():
         UPDATE = False # Resetting update to wait for listener to make it true again
 
 main()
-
-# with keyboard.Events() as events:
-
-#         controller = keyboard.Controller()
-
-#         for event in events:
-#             if event.key == keyboard.Key.esc:
-#                 print("No longer reading events")
-#                 break
-#             if isinstance(event, keyboard.Events.Press):
-#                 if isinstance(event.key, keyboard.KeyCode): # If last key pressed is an alphanumeric character:
-#                     kp3.append(event.key.char) # Storing last 3 keyboard presses alphanumeric characters
-#                     print(kp3)
