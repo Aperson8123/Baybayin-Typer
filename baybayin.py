@@ -8,6 +8,8 @@ from pynput import keyboard
 def filter_unicode(l: list[chr]) -> list:
     return [char for char in l if un.category(char) not in ('Cc', 'Cn', 'Co')] 
 
+vowels_eng = ("a", "e", "i", "o", "u")
+
 # Where the baybayin characters start and end in unicode
 baychar_start: int = int("1700", 16)
 baychar_end: int = int("1712", 16)
