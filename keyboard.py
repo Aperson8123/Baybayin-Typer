@@ -36,20 +36,23 @@ def main():
     global UPDATE
     global KP
 
-    key3: deque[str] = deque((None, None, None), maxlen=3) # Initially filled with None so all elems are always accesible
+    key2: deque[str] = deque((None, None), maxlen=2) # Initially filled with None so all elems are always accesible
 
     while listener.running:
         if not UPDATE: # Do nothing if theres no update from listener. Updates only occur when an alphanumeric key is pressed
             continue
 
         kp = KP # making a local version to use cause thats probably better or smthn
-        key3.append(kp)
+        key2.append(kp)
 
         print(f"update: new kp {kp}")
-        print(f"last 3 keys: {key3}")
+        print(f"last 2 keys: {key2}")
 
-        
-        if kp in by.baycons_eng:
+        # always uses backspace before doing anything to delete the english character that was pressed
+        if key2[0] in by.baycons_eng and kp == 'a':
+            controller.tap(Key.backspace)
+            controller.tap(Key.backspace) # delete the vowel terminator that we assume is there
+        elif kp in by.baycons_eng:
             controller.tap(Key.backspace)
             controller.tap(by.baycons_dict[kp])
             controller.tap(by.baymod_dict["vowel_terminator"])
