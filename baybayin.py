@@ -20,18 +20,18 @@ baycons_uni: list[int] = list(range(baychar_start, baychar_end))
 "List of all baybayin consonant characters in decimal unicode in ascending order"
 baycons: list[chr] = [chr(x) for x in baycons_uni]
 "List of all baybayin consonant characters in ascending order of their unicode number"
-bayeng: list[str] = ["a", "i", "u", "k", "g", "ng", "t", "d", "n", "p", "b", "m", "y", "r", "l", "w", "s", "h"]
+baycons_eng: list[str] = ["a", "i", "u", "k", "g", "ng", "t", "d", "n", "p", "b", "m", "y", "r", "l", "w", "s", "h"]
 "What baycons list corresponds to in english characters in order"
 
 baymod_int: list[int] = list(range(baymod_start, baymod_end))
 "List of all baybayin characters modifiers in decimal unicode in ascending order"
 baymod: list[chr] = [chr(x) for x in baymod_int] 
 "List of all baybayin character modifiers in ascending order of their unicode number"
-baymodeng: list[str] = ["i", "u", "vowel_terminator"]
+baymod_eng: list[str] = ["i", "u", "vowel_terminator"]
 "What baymod list corresponds to in english characters in order"
 
 baycons_dict: dict[str, str] = {}
-for i, char in enumerate(bayeng): baycons_dict.update({char: baycons[i]})
+for i, char in enumerate(baycons_eng): baycons_dict.update({char: baycons[i]})
 
 baymod_dict: dict[str, str] = {}
-for i, char in enumerate(baymodeng): baymod_dict.update({char: baymod[i]})
+for i, char in enumerate(baymod_eng): baymod_dict.update({char: baymod[i]})

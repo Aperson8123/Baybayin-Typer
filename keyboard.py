@@ -50,7 +50,7 @@ def main():
         print(f"last 3 keys: {key3}")
 
         
-        if kp in by.bayeng:
+        if kp in by.baycons_eng:
             controller.tap(Key.backspace)
             controller.tap(by.baycons_dict[kp])
             controller.tap(by.baymod_dict["vowel_terminator"])
