@@ -50,7 +50,7 @@ def main():
 
         # Before doing anything, delete the english character that was pressed
         controller.tap(Key.backspace)
-        
+
         # Definitely a better way to do this
         if last_key == 'n' and (kp == 'g'):
             for i in range(2): controller.tap(Key.backspace)
@@ -59,7 +59,7 @@ def main():
         elif (last_key in by.vowels_eng or (last_key is None)) and (kp in by.vowels_eng):
             controller.tap(by.baycons_dict[kp])
         elif last_key in by.baycons_eng and kp == 'a':
-            controller.tap(Key.backspace) # delete the vowel terminator that we assume is there
+            controller.tap(Key.backspace)
         elif last_key in by.baycons_eng and kp == 'i':
             controller.tap(Key.backspace)
             controller.tap(by.baymod_dict['i'])
@@ -70,4 +70,5 @@ def main():
             controller.tap(by.baycons_dict[kp])
             controller.tap(by.baymod_dict["vowel_terminator"])
 
-main()
+if __name__ == "__main__":
+    main()
