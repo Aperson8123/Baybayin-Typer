@@ -1,28 +1,22 @@
 import traceback
 import baybayin as by
 from collections import deque
+from queue import Queue
 from pynput import keyboard
 from pynput.keyboard import Key, KeyCode
 
-KP: str = ""
-"Global variable storing the last alphanumeric keyboard input"
-ALPH_UPDATE: bool = False
-"Used so listener thread can communicate with main thread when an alphanumeric key is pressed"
-
-def on_press(key: KeyCode | Key) -> bool:
-    global ALPH_UPDATE
-    global KP
+def on_press(key: KeyCode | Key, last_kp: Queue) -> bool:
     try:
         if key == Key.esc:
+            last_kp.put('STOP')
             print("No longer listening to keyboard")
             return False
 
-        if isinstance(key, KeyCode): # If last key pressed is an alphanumeric character:
+        if isinstance(key, KeyCode) and (key.char in by.baycons_eng) or key.char in ('o', 'u'):
             char = key.char.lower() # To make everything case insensitive
             if char == 'o': char = 'u'
             if char == 'e': char = 'i'
-            KP = char
-            ALPH_UPDATE = True
+            last_kp.put(char)
 
     except:
         print(traceback.format_exc())
@@ -30,31 +24,32 @@ def on_press(key: KeyCode | Key) -> bool:
 
 def main():
 
-    listener = keyboard.Listener(on_press=on_press)
+    last_kp: Queue[str] = Queue(1) # Used to communicate last kp with listener thread
+    key2: deque[str] = deque((None, None), maxlen=2) # Initially filled with None so all elems are always accesible
+
+    listener = keyboard.Listener(on_press = lambda key: on_press(key, last_kp))
     listener.start()
 
     controller = keyboard.Controller()
 
-    global ALPH_UPDATE
-    global KP
-
-    key2: deque[str] = deque((None, None), maxlen=2) # Initially filled with None so all elems are always accesible
     while listener.running:
-        if not ALPH_UPDATE:
-            continue
-
-        # Before doing anything, delete the english character that was pressed
-        controller.tap(Key.backspace)
-
-        kp = KP # making a local version to use cause thats probably better or smthn
+        kp = last_kp.get() # Will block the thread, waiting for an input
+        if kp == "STOP": break
         key2.append(kp)
+        last_key = key2[0]
 
         print(f"kp: {kp}")
         print(f"last 2 keys: {key2}")
 
-        last_key = key2[0]
+        # Before doing anything, delete the english character that was pressed
+        controller.tap(Key.backspace)
+
         # Definitely a better way to do this
-        if (last_key in by.vowels_eng or (last_key is None)) and (kp in by.vowels_eng):
+        if last_key == 'n' and (kp == 'g'):
+            for i in range(2): controller.tap(Key.backspace)
+            controller.tap(by.baycons_dict['ng'])
+            controller.tap(by.baymod_dict['vowel_terminator'])
+        elif (last_key in by.vowels_eng or (last_key is None)) and (kp in by.vowels_eng):
             controller.tap(by.baycons_dict[kp])
         elif last_key in by.baycons_eng and kp == 'a':
             controller.tap(Key.backspace) # delete the vowel terminator that we assume is there
@@ -67,7 +62,5 @@ def main():
         elif (kp in by.baycons_eng) and (kp not in by.vowels_eng):
             controller.tap(by.baycons_dict[kp])
             controller.tap(by.baymod_dict["vowel_terminator"])
-
-        ALPH_UPDATE = False # Resetting update to wait for listener to make it true again
 
 main()
