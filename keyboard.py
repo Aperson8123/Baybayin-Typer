@@ -12,11 +12,15 @@ def on_press(key: KeyCode | Key, last_kp: Queue) -> bool:
             print("No longer listening to keyboard")
             return False
 
-        if isinstance(key, KeyCode) and (key.char in by.baycons_eng) or key.char in ('o', 'u'):
-            char = key.char.lower() # To make everything case insensitive
-            if char == 'o': char = 'u'
-            if char == 'e': char = 'i'
-            last_kp.put(char)
+        if key == Key.space:
+            last_kp.put('space')
+
+        if isinstance(key, KeyCode): 
+            if (key.char in by.baycons_eng) or key.char in ('o', 'e'):
+                char = key.char.lower() # To make everything case insensitive
+                if char == 'o': char = 'u'
+                if char == 'e': char = 'i'
+                last_kp.put(char)
 
     except:
         print(traceback.format_exc())
@@ -35,6 +39,9 @@ def main():
     while listener.running:
         kp = last_kp.get() # Will block the thread, waiting for an input
         if kp == "STOP": break
+        if kp == "space":
+            key2.append(None)
+            continue
         key2.append(kp)
         last_key = key2[0]
 
@@ -43,7 +50,7 @@ def main():
 
         # Before doing anything, delete the english character that was pressed
         controller.tap(Key.backspace)
-
+        
         # Definitely a better way to do this
         if last_key == 'n' and (kp == 'g'):
             for i in range(2): controller.tap(Key.backspace)
@@ -53,10 +60,10 @@ def main():
             controller.tap(by.baycons_dict[kp])
         elif last_key in by.baycons_eng and kp == 'a':
             controller.tap(Key.backspace) # delete the vowel terminator that we assume is there
-        elif last_key in by.baycons_eng and kp in ('i', 'e'):
+        elif last_key in by.baycons_eng and kp == 'i':
             controller.tap(Key.backspace)
             controller.tap(by.baymod_dict['i'])
-        elif last_key in by.baycons_eng and kp in ('o', 'u'):
+        elif last_key in by.baycons_eng and kp == 'u':
             controller.tap(Key.backspace)
             controller.tap(by.baymod_dict['u'])
         elif (kp in by.baycons_eng) and (kp not in by.vowels_eng):
