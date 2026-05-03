@@ -16,7 +16,7 @@ def on_press(key: KeyCode | Key, last_kp: Queue) -> bool:
             last_kp.put('space')
 
         if isinstance(key, KeyCode): 
-            if (key.char in by.baycons_eng) or key.char in ('o', 'e'):
+            if (key.char in by.baychar_eng) or key.char in ('o', 'e'):
                 char = key.char.lower() # To make everything case insensitive
                 if char == 'o': char = 'u'
                 if char == 'e': char = 'i'
@@ -54,20 +54,20 @@ def main():
         # Definitely a better way to do this
         if last_key == 'n' and (kp == 'g'):
             for i in range(2): controller.tap(Key.backspace)
-            controller.tap(by.baycons_dict['ng'])
+            controller.tap(by.baychar_dict['ng'])
             controller.tap(by.baymod_dict['vowel_terminator'])
         elif (last_key in by.vowels_eng or (last_key is None)) and (kp in by.vowels_eng):
-            controller.tap(by.baycons_dict[kp])
-        elif last_key in by.baycons_eng and kp == 'a':
+            controller.tap(by.baychar_dict[kp])
+        elif last_key in by.baychar_eng and kp == 'a':
             controller.tap(Key.backspace)
-        elif last_key in by.baycons_eng and kp == 'i':
+        elif last_key in by.baychar_eng and kp == 'i':
             controller.tap(Key.backspace)
             controller.tap(by.baymod_dict['i'])
-        elif last_key in by.baycons_eng and kp == 'u':
+        elif last_key in by.baychar_eng and kp == 'u':
             controller.tap(Key.backspace)
             controller.tap(by.baymod_dict['u'])
-        elif (kp in by.baycons_eng) and (kp not in by.vowels_eng):
-            controller.tap(by.baycons_dict[kp])
+        elif (kp in by.baychar_eng) and (kp not in by.vowels_eng):
+            controller.tap(by.baychar_dict[kp])
             controller.tap(by.baymod_dict["vowel_terminator"])
 
 if __name__ == "__main__":
