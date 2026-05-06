@@ -55,6 +55,7 @@ def main():
         if last_key == 'n' and (kp == 'g'):
             for i in range(2): controller.tap(Key.backspace)
             controller.tap(by.baychar_dict['ng'])
+            controller.tap(by.zero_width_space)
             controller.tap(by.baymod_dict['vowel_terminator'])
         elif (last_key in by.vowels_eng or (last_key is None)) and (kp in by.vowels_eng):
             controller.tap(by.baychar_dict[kp])
@@ -68,6 +69,7 @@ def main():
             controller.tap(by.baymod_dict['u'])
         elif (kp in by.baychar_eng) and (kp not in by.vowels_eng):
             controller.tap(by.baychar_dict[kp])
+            controller.tap(by.zero_width_space)
             controller.tap(by.baymod_dict["vowel_terminator"])
 
 if __name__ == "__main__":

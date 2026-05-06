@@ -13,6 +13,10 @@ baychar_end: int = int("1712", 16)
 baymod_start: int = int("1712", 16)
 baymod_end: int = int("1716", 16) 
 
+#Used so apps that use graphme clustering dont combine characters with modifiers as one character 
+zero_width_space_code: int = int("200B", 16)
+zero_width_space: str = chr(zero_width_space_code)
+
 baychar_uni: list[int] = list(range(baychar_start, baychar_end))
 "List of all baybayin consonant characters in decimal unicode in ascending order"
 baychar: list[chr] = [chr(x) for x in baychar_uni]
@@ -29,4 +33,4 @@ baymod: list[chr] = [chr(x) for x in baymod_int]
 baymod_eng: list[str] = ["i", "u", "vowel_terminator"]
 "What baymod list corresponds to in english characters in order"
 baymod_dict: dict[str, str] = {k:v for (k,v) in zip(baymod_eng, baymod)}
-"Using english characters, access the corresponding character in baybayin"
+"Using english characters, access the corresponding modifier in baybayin"
