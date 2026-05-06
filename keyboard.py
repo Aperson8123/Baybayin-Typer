@@ -45,8 +45,8 @@ def main():
         key2.append(kp)
         last_key = key2[0]
 
-        print(f"kp: {kp}")
-        print(f"last 2 keys: {key2}")
+        # print(f"kp: {kp}")
+        # print(f"last 2 keys: {key2}")
 
         # Before doing anything, delete the english character that was pressed
         controller.tap(Key.backspace)
