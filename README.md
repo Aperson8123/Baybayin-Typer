@@ -1,4 +1,5 @@
 ctrl + \ toggles on or off
+
 ctrl + ' shuts down
 
 Only works for letters used in Filipino (ex: typing x or q will not convert them into baybayin of "ecks" or "kyu")
