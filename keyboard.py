@@ -7,10 +7,14 @@ from pynput.keyboard import Key, KeyCode
 
 def on_press(key: KeyCode | Key, last_kp: Queue) -> bool:
     try:
-        if key == Key.esc:
+        # vk is virtual keycode and inputting ctrl + character sends a kecode with a vk 
+        if hasattr(key, "vk") and key.vk == by.stop_character:
             last_kp.put('STOP')
             print("No longer listening to keyboard")
             return False
+
+        if key == KeyCode.from_char(by.toggle_character):
+            last_kp.put('PAUSE')
 
         if key == Key.space:
             last_kp.put('space')
@@ -25,11 +29,13 @@ def on_press(key: KeyCode | Key, last_kp: Queue) -> bool:
     except:
         print(traceback.format_exc())
         print(f"{key} of type {type(key)} was last pressed\n")
+        return False
 
 def main():
 
     last_kp: Queue[str] = Queue(1) # Used to communicate last kp with listener thread
     key2: deque[str] = deque((None, None), maxlen=2) # Initially filled with None so all elems are always accesible
+    pause = False
 
     listener = keyboard.Listener(on_press = lambda key: on_press(key, last_kp))
     listener.start()
@@ -38,22 +44,27 @@ def main():
 
     while listener.running:
         kp = last_kp.get() # Will block the thread, waiting for an input
-        if kp == "STOP": break
+        if kp == "STOP": 
+            break
+        if kp == 'PAUSE':
+            if pause:
+                pause = False
+                print("toggled on")
+            else:
+                pause = True
+                print("toggled off")
+        if pause == True:
+            continue
         if kp == "space":
             key2.append(None)
             continue
         key2.append(kp)
         last_key = key2[0]
 
-        # print(f"kp: {kp}")
-        # print(f"last 2 keys: {key2}")
+        if kp != 'PAUSE': controller.tap(Key.backspace)
 
-        # Before doing anything, delete the english character that was pressed
-        controller.tap(Key.backspace)
-
-        # Definitely a better way to do this
         if last_key == 'n' and (kp == 'g'):
-            for i in range(2): controller.tap(Key.backspace)
+            for i in range(3): controller.tap(Key.backspace)
             controller.tap(by.baychar_dict['ng'])
             controller.tap(by.zero_width_space)
             controller.tap(by.baymod_dict['vowel_terminator'])

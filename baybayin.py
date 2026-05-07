@@ -17,6 +17,13 @@ baymod_end: int = int("1716", 16)
 zero_width_space_code: int = int("200B", 16)
 zero_width_space: str = chr(zero_width_space_code)
 
+ctrl_backslash: str = '\x1c'
+toggle_character: str = ctrl_backslash
+
+#Using virtual keycodes
+ctrl_single_quote = 222
+stop_character = ctrl_single_quote
+
 baychar_uni: list[int] = list(range(baychar_start, baychar_end))
 "List of all baybayin consonant characters in decimal unicode in ascending order"
 baychar: list[chr] = [chr(x) for x in baychar_uni]
